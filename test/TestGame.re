@@ -58,5 +58,51 @@ describe("Test Game transitions", ({test}) => {
       Deuce
     );
   });
+
+  test("Given player: 40 | other : 0 when other wins then score is fortyFifteen",
+  ({expect}) => {
+    let fortyLove = {player: PlayerOne, otherPlayerPoint: Love};
+    let fortyFifteen = {player: PlayerOne, otherPlayerPoint: Fifteen};
+    expect.equal(
+      scoreWhenForty(fortyLove, other(fortyLove.player)),
+      Forty(fortyFifteen)
+    );
+  });
+
+  test("Given player: 15 | other : 15 when player wins then score is 30/15",
+    ({expect}) => {
+    let fifteenFifteen = {playerOne: Fifteen, playerTwo: Fifteen};
+    let thirtyFifteen = {playerOne: Thirty, playerTwo: Fifteen};
+    expect.equal(
+      scoreWhenPoints(fifteenFifteen, PlayerOne),
+      Points(thirtyFifteen)
+    );
+
+    /*expect(scoreWhenPoints(fifteenFifteen, PlayerOne))
+    |> toEqual(Points(thirtyFifteen));*/
+  });
+
+  test("Given player: 0 | other : 15 when other wins then score is 0/30",
+  ({expect}) => {
+    let loveFifteen = {playerOne: Love, playerTwo: Fifteen};
+    let loveThirty = {playerOne: Love, playerTwo: Thirty};
+    expect.equal(
+      scoreWhenPoints(loveFifteen, PlayerTwo),
+      Points(loveThirty)
+    );
+  });
+
+  test(
+    "Given player: 30 | other : 15 when player wins then score is 40/15",
+    ({expect}) => {
+      let thirtyFifteen = {playerOne: Thirty, playerTwo: Fifteen};
+      let fortyFifteen = Forty{player: PlayerOne, otherPlayerPoint: Fifteen};
+      expect.equal(
+        scoreWhenPoints(thirtyFifteen, PlayerOne),
+        fortyFifteen
+    );
+  });
+
+  
 });
 
