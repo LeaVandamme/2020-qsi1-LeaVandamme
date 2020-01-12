@@ -12,16 +12,10 @@ type pointsData = {
   playerTwo: point
 };
 
-/*let s1 = {playerOne: Love, playerTwo: Love};
-let s2 = {playerOne: Fifteen, playerTwo: Love};
-let s3 = {playerOne: Thirty, playerTwo: Love};*/
-
 type fortyData = {
   player: player, /* The player who have forty points */
   otherPlayerPoint: point
 };
-
-/*let fd : fortyData = {player: PlayerOne, otherPlayerPoint: Love};*/
 
 type score =
 | Points(pointsData)
@@ -45,6 +39,62 @@ let other = player =>
   | PlayerTwo => PlayerOne
   };
 
-let scoreWhenForty : (fortyData, fortyData) => 
-  fortyPlayer == winner ? Game(winner) : Deuce;
+  let incrementPoint: point => option(point) =
+    point =>
+      switch point {
+      | Love => Some(Fifteen)
+      | Fifteen => Some(Thirty)
+      | Thirty => None
+      };
+
+  /*let scoreWhenForty = (current, winner) => Game(winner);*/
+
+  /*let scoreWhenForty: (fortyData, player) => score =
+  (actualScore, winner) =>
+    actualScore.player == winner ? Game(winner) : Deuce;*/
+
+  let scoreWhenForty = (current, winner) =>
+      current.player == winner ?
+        Game(winner) :
+        (
+          switch (incrementPoint(current.otherPlayerPoint)) {
+          | Some(p) => Forty({...current, otherPlayerPoint: p})
+          | None => Deuce
+          }
+        );
+
+  let pointTo = (player, point, current) =>
+        switch player {
+        | PlayerOne => {...current, playerOne: point}
+        | PlayerTwo => {...current, playerTwo: point}
+        };
+      
+  let pointFor = (player, current) =>
+        switch player {
+        | PlayerOne => current.playerOne
+        | PlayerTwo => current.playerTwo
+        };
+      
+  let scoreWhenPoints = (current, winner) =>
+        switch (current |> pointFor(winner) |> incrementPoint) {
+        | Some(np) => Points(pointTo(winner, np, current))
+        | None =>
+          Forty({
+            player: winner,
+            otherPlayerPoint: current |> pointFor(other(winner))
+          })
+        };
+
+  let scoreWhenGame = winner => Game(winner);
+
+  let score = (current, winner) =>
+        switch current {
+        | Points(p) => scoreWhenPoints(p, winner)
+        | Forty(f) => scoreWhenForty(f, winner)
+        | Deuce => scoreWhenDeuce(winner)
+        | Advantage(a) => scoreWhenAdvantage(a, winner)
+        | Game(g) => scoreWhenGame(g)
+        };
+
+  let newGame = Points({playerOne: Love, playerTwo: Love});
 
