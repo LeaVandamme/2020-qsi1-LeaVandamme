@@ -1,23 +1,23 @@
 open Framework;
 open TennisKata.Game;
 
-describe("Test Game transitions", ({test}) => {
+describe("Test Players are differents", ({test}) => {
   test("Given PlayerOne then PlayerTwo is different", ({expect}) => {
     expect.notEqual(PlayerOne, PlayerTwo)
   })
 });
 
-describe("Test Game transitions", ({test}) => {
+describe("Test Deuce -> Advantage", ({test}) => {
   test("Given deuce when PlayerOne wins then score is correct", ({expect}) => {
     expect.equal(scoreWhenDeuce(PlayerOne), Advantage(PlayerOne))
   });
-});
 
-describe("Test Game transitions", ({test}) => {
   test("Given deuce when PlayerTwo wins then score is correct", ({expect}) => {
     expect.equal(scoreWhenDeuce(PlayerTwo), Advantage(PlayerTwo))
   });
+});
 
+describe("Test Advantage -> Deuce or Game", ({test}) => {
   test(
     "Given advantage when advantaged player wins then score is correct",
     ({expect}) => {
@@ -58,7 +58,9 @@ describe("Test Game transitions", ({test}) => {
       Deuce
     );
   });
+});
 
+describe("Simple test score, from 0 to 40 without deuce or game", ({test}) => {
   test("Given player: 40 | other : 0 when other wins then score is fortyFifteen",
   ({expect}) => {
     let fortyLove = {player: PlayerOne, otherPlayerPoint: Love};
@@ -102,7 +104,57 @@ describe("Test Game transitions", ({test}) => {
         fortyFifteen
     );
   });
+});
 
-  
+describe("Tests for toString scores", ({test}) => {
+  test(
+    "Points data",
+    ({expect}) => {
+      let thirtyFifteen = {playerOne: Thirty, playerTwo: Fifteen};
+      expect.equal(
+        string_of_score(Points(thirtyFifteen)),
+        "Player One Thirty ; Player Two Fifteen"
+    );
+  });
+
+  test(
+    "Forty data",
+    ({expect}) => {
+      let fortyFifteen = {player: PlayerOne, otherPlayerPoint: Fifteen};
+      expect.equal(
+        string_of_score(Forty(fortyFifteen)),
+        "Player One Forty ; Player Two Fifteen"
+    );
+  });
+
+  test(
+    "Deuce",
+    ({expect}) => {
+      let d = Deuce;
+      expect.equal(
+        string_of_score(d),
+        "Deuce"
+    );
+  });
+
+  test(
+    "Advantage",
+    ({expect}) => {
+      let advantageOne = Advantage(PlayerOne);
+      expect.equal(
+        string_of_score(advantageOne),
+        "Advantage Player One"
+    );
+  });
+
+  test(
+    "Game",
+    ({expect}) => {
+      let gameTwo = Game(PlayerTwo);
+      expect.equal(
+        string_of_score(gameTwo),
+        "Game Player Two"
+    );
+  });
 });
 

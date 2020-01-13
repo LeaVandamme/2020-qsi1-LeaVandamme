@@ -98,3 +98,24 @@ let other = player =>
 
   let newGame = Points({playerOne: Love, playerTwo: Love});
 
+  let string_of_player = (player) => 
+        switch player {
+          | PlayerOne => "Player One"
+          | PlayerTwo => "Player Two"
+          };
+
+  let string_of_point = (point) => 
+        switch point {
+          | Love => "Love"
+          | Fifteen => "Fifteen"
+          | Thirty => "Thirty"
+          };
+
+  let string_of_score = (score) => 
+        switch score {
+          | Points(p) => string_of_player(PlayerOne) ++ " " ++ string_of_point(p.playerOne) ++ " ; " ++ string_of_player(PlayerTwo) ++ " " ++ string_of_point(p.playerTwo)
+          | Forty(f) => string_of_player(f.player) ++ " Forty" ++ " ; " ++ string_of_player(other(f.player)) ++ " " ++ string_of_point(f.otherPlayerPoint)
+          | Deuce => "Deuce"
+          | Advantage(a) => "Advantage " ++ string_of_player(a)
+          | Game(g) => "Game " ++ string_of_player(g)
+          };
